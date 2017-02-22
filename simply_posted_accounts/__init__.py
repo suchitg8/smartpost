@@ -1,0 +1,1 @@
+default_app_config = "simply_posted_accounts.apps.SimplyPostedAccountsConfig"

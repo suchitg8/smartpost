@@ -1,0 +1,11 @@
+body.account-settings .account-settings,
+body.account-voice .account-voice,
+body.account-social-profiles .account-social-profiles,
+body.account-posting-schedule .account-posting-schedule,
+body.account-password .account-password,
+body.account-delete .account-delete {
+    z-index: 2; // Place active items above their siblings for proper border styling
+    color: @list-group-active-color;
+    background-color: @list-group-active-bg;
+    border-color: @list-group-active-border;
+}

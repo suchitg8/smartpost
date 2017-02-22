@@ -1,0 +1,20 @@
+{% load i18n account_tags %}{% blocktrans with site_name=current_site.name %}
+
+{{ user }},
+
+We are thrilled you have joined Simply Posted. As you know, we are all about social media and supporting small business owners around the world! Thank you for believing in us and our mission!
+
+You now have a user account with us and we look forward to helping you grow your online presence. In order to complete your account, please click the link below:
+
+{{ activate_url }}
+
+If you need help or support, please do not hesitate to call, text, email or maybe even tweet us when you are in need! Thanks again for believing in our mission and welcome!
+
+--
+*SimplyPosted Support*
+*"Social Media, Done For You"*
+tel: 855-946-4567
+www.gosimplyposted.com
+@gosimplyposted
+
+{% endblocktrans %}
