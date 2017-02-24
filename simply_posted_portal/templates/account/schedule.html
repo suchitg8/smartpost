@@ -42,8 +42,8 @@
                                             {% if day != 0 %}
                                                 <span class="calendarium-date">{{ day }}</span>
                                                 {% for occurrence in occurrences %}
-                                                    <p class="alert" style="background-color: #{{ occurrence.event.category.color }}">
-                                                        <a title="{{ occurrence }}" href="{% url "calendar_occurrence_detail" pk=occurrence.event.pk year=occurrence.start.year month=occurrence.start.month day=occurrence.start.day %}">{{ occurrence|truncatechars:22 }}</a>
+                                                <p class="alert calendar-popover" style="background-color: #{{ occurrence.event.category.color }}" data-id="{{ occurrence.event.id }}">
+                                                    <a tabindex="0" role="button" data-html="true" data-toggle="popover" data-placement="top" title="{{ occurrence }}" title="{{ occurrence.title }}" data-content="<div class='date'>{{ occurrence.start }}</div><div class='description'>{{ occurrence.description }}</div><div class='buttons'><button type='button' class='btn btn-primary pull-left btn-sm js-approve-content'>Approve</button><button type='button' class='btn btn-danger pull-right btn-sm js-reject-content'>Reject</button></div>">{{ occurrence|truncatechars:22 }}</a>
                                                     </p>
                                                 {% endfor %}
                                             {% endif %}

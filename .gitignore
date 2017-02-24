@@ -1,1 +1,8 @@
 *.pyc
+
+dev.db
+*.log
+
+node_modules
+static/dist/*
+static/_build/*

@@ -26,6 +26,13 @@
         td.calendarium-current {
             background: lighten(@green, 50%);
         }
+        td.approved {
+          background-color: lighten(#5cb85c, 30%);
+        }
+
+        td.rejected {
+          background-color: lighten(#c9302c, 30%);
+        }
         td {
             border-left: 1px solid @calendar-border;
             border-right: none;
@@ -67,7 +74,6 @@
                 padding: 2px 4px;
                 margin-bottom: 2px;
                 margin-right: 17px;
-                height: 12px;
                 overflow: hidden;
                 a, a:hover {
                     font-size: 10px;
@@ -108,6 +114,33 @@
             border: none;
         }
     }
+}
+
+
+.calendar-popover {
+  .popover {
+    min-width: 200px;
+  }
+
+  .popover-title {
+    font-weight: bold;
+  }
+
+  .popover-content {
+    .date {
+      font-size: 10px;
+      color: rgba(0,0,0,0.5);      
+    }
+
+    .description {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    .buttons {
+      overflow: hidden;
+    }
+  }
 }
 
 @media (max-width: 680px) {

@@ -157,7 +157,8 @@ INSTALLED_APPS = [
 
     # project
     "simply_posted_portal",
-    "simply_posted_accounts"
+    "simply_posted_accounts",
+    "simply_posted_calendar"
 ]
 
 # Go to https://stripe.com/ and grab your keys and put here
