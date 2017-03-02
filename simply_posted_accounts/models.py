@@ -4,6 +4,9 @@ from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+# Added by vikrant
+from model_utils.models import TimeStampedModel
+from django.utils.translation import ugettext_lazy as _
 
 business_type_choices = (
     ('', '---'),
@@ -56,3 +59,61 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = BaseUserAdmin.list_display + ('company',)
     search_fields = BaseUserAdmin.search_fields + ('profile__company',)
+
+# Code added by vikrant
+class ContentProvider(TimeStampedModel):
+    first_name = models.CharField(
+        max_length=50,
+        verbose_name=_("First Name"),
+        help_text=_("Enter the first name")
+    )
+    last_name = models.CharField(
+        max_length=50,
+        verbose_name=_("Last Name"),
+        help_text=_("Enter the last name")
+    )
+    email = models.CharField(
+        max_length=50,
+        verbose_name=_("email"),
+        help_text=_("Enter the your email name")
+    )
+    password = models.CharField(
+        max_length=80,
+        verbose_name=_("password"),
+        help_text=_("Enter the password (min 8 character)")
+    )
+    active = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return self.email
+
+
+# Import Table
+class DBform(TimeStampedModel):
+    playful_title = models.CharField(
+        max_length=200,
+        verbose_name=_("Play Full"),
+        help_text=_("Enter the playful title")
+    )
+    corporate_title = models.CharField(
+        max_length=200,
+        verbose_name=_("Corporate Title"),
+        help_text=_("Enter the corporate title")
+    )
+    blog_link = models.CharField(
+        max_length=200,
+        verbose_name=_("Blog Link"),
+        help_text=_("Enter the Blog Link")
+    )
+    image_link = models.CharField(
+        max_length=200,
+        verbose_name=_("Image Link"),
+        help_text=_("Enter the image link")
+    )
+    category  = models.CharField(
+        max_length=5,
+        verbose_name=_("category"),
+        help_text=_("Enter the category")
+    )
+    contentprovider = models.ForeignKey(ContentProvider, default=None, null=True, blank=True)

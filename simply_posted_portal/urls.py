@@ -22,6 +22,14 @@ urlpatterns = [
     url(r"^account/voice/$", simply_posted_accounts.views.VoiceView.as_view(), name="voice_settings"),
     url(r"^account/signup/$", simply_posted_accounts.views.SignupView.as_view(template_name="account/signup.html"), name="account_signup"),
     url(r"^account/login/$", simply_posted_accounts.views.LoginView.as_view(), name="account_signup"),
+    # Added by vikrant
+    url(r"^account/cplogin/$", simply_posted_accounts.views.ContentProviderLoginView.as_view(), name="cplogin"),
+    url(r"^account/loadcsvfile/$", simply_posted_accounts.views.LoadCSVFileView.as_view(), name="loadcsvfile"),
+    url(r"^account/cplogout/$", simply_posted_accounts.views.ContentProviderLogoutView.as_view(), name="cplogout"),
+    url(r"^account/cpresetpassword/$", simply_posted_accounts.views.ContentProviderResetPasswordView.as_view(), name="cpresetpassword"),
+
+
+
     url(r"^account/", include("account.urls")),
     url(r"^payments/", include("pinax.stripe.urls")),
 ]
