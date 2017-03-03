@@ -50,3 +50,27 @@ class FacebookPublishingService:
     self.post_to_wall()
     self.post_to_groups(group_ids)
     self.post_to_pages(page_ids)
+
+class LinkedInPublishingService:
+
+  def __init__(self, profile):
+    self.profile = profile
+    self.url = "https://api.linkedin.com/v1/people/~/shares?format=json"
+    self.format_param = "?format=json"
+    self.headers = { 'x-li-format': 'json', 'Authorization': "Bearer " + profile.extra_data['access_token'] }
+
+  def share(self):
+    data = {
+      "comment": "API test",
+      "content": {
+        "description": "description",
+        "title": "title",
+        "submitted-url": "http://www.test.com"
+      },
+      "visibility": {
+        "code": "connections-only"
+      }
+    }
+
+    response = requests.post(self.url, headers=self.headers, json=data)
+    return response
