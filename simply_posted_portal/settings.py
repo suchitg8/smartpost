@@ -225,6 +225,7 @@ SOCIAL_AUTH_TWITTER_SECRET = os.environ.get("SOCIAL_AUTH_TWITTER_SECRET")
 # Facebook Authentication
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get("SOCIAL_AUTH_FACEBOOK_KEY")
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("SOCIAL_AUTH_FACEBOOK_SECRET")
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['publish_actions', 'user_managed_groups', 'manage_pages', 'publish_pages']
 SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('first_name', 'first_name'), ('last_name', 'last_name')]
 
 # Instagram Authentication
