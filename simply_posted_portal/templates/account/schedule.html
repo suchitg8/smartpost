@@ -16,48 +16,8 @@
 {% block head_title %}{% trans "Calendar" %}{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-lg-10">
-            <legend>{% trans "Calendar" %}</legend>
-            <div id="calendar" class="animated animated-sm bounceInUp">
-                <h2><small>Manage your social media publications for {{ date|date:"F Y" }}</small></h2>
-                <form action="." method="post">
-                    {% csrf_token %}
-                    <input class="btn btn-default" type="submit" name="previous" value="{% trans "Previous" %}" />
-                    <input class="btn btn-default" type="submit" name="next" value="{% trans "Next" %}" />
-                    <input class="btn btn-default" type="submit" name="today" value="{% trans "Today" %}" />
-                </form>
-                <table class="table" id="calendar-month">
-                    <tr>
-                        {% for weekday in weekdays %}
-                            <th>{{ weekday }}</th>
-                        {% endfor %}
-                    </tr>
-                    {% for week in month %}
-                        {% if week %}
-                            <tr>
-                                {% for day, occurrences, current in week %}
-                                    <td class="{% if day == 0 %}calendarium-empty{% elif current %}calendarium-current{% else %}calendarium-day{% endif %}">
-                                        <div class="calendarium-relative">
-                                            {% if day != 0 %}
-                                                <span class="calendarium-date">{{ day }}</span>
-                                                {% for occurrence in occurrences %}
-                                                <p class="alert calendar-popover" style="background-color: #{{ occurrence.event.category.color }}" data-id="{{ occurrence.event.id }}">
-                                                    <a tabindex="0" role="button" data-html="true" data-toggle="popover" data-placement="top" title="{{ occurrence }}" title="{{ occurrence.title }}" data-content="<div class='date'>{{ occurrence.start }}</div><div class='description'>{{ occurrence.description }}</div><div class='buttons'><button type='button' class='btn btn-primary pull-left btn-sm js-approve-content'>Approve</button><button type='button' class='btn btn-danger pull-right btn-sm js-reject-content'>Reject</button></div>">{{ occurrence|truncatechars:22 }}</a>
-                                                    </p>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                {% endfor %}
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
-    </div>
-<div id="calendar"></div>
+    <h2><small>Manage your social media publications for {{ date|date:"F Y" }}</small></h2>
+    <div id="calendar"></div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
 {% endblock %}
