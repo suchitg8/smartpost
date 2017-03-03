@@ -1,4 +1,7 @@
+from django.conf import settings
+
 import requests
+import twitter
 
 class FacebookPublishingService:
   
@@ -74,3 +77,16 @@ class LinkedInPublishingService:
 
     response = requests.post(self.url, headers=self.headers, json=data)
     return response
+
+class TwitterPublishingService:
+
+  def tweet(self, profile):
+    api = twitter.Api(
+      consumer_key=settings.SOCIAL_AUTH_TWITTER_KEY,
+      consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
+      access_token_key=profile.extra_data['access_token']['oauth_token'],
+      access_token_secret=profile.extra_data['access_token']['oauth_token_secret']
+    )
+
+    post = api.PostUpdate('testing')
+    return post
