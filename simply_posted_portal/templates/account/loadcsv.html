@@ -1,0 +1,92 @@
+{% extends "theme_bootstrap/base.html" %}
+
+{% block styles %}
+    {% include "_styles.html" %}
+<style>
+    .cover {
+        position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: none;
+    margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+
+{% load i18n %}
+{% load bootstrap %}
+{% block site_brand %}<a class="navbar-brand" href="{% url "home" %}"><img src='/site_media/static/logo.png'></a>{% endblock %}
+
+{% block head_title_base %}{% block head_title %}CP Login{% endblock %}{% endblock %}
+{% block nav %}
+
+{% endblock %}
+
+{% block account_bar %}
+<ul class="nav navbar-nav pull-right">
+    {% if request.session.contentprovider %}
+        <p class="navbar-text">
+            <i class="fa fa-user"></i> {{user.first_name}} {{user.last_name}}
+        </p>
+        <li>
+            <a  href="/account/cpresetpassword/"><i class="fa fa-cog"></i> {% trans "Setting" %}</a>
+        </li>
+        <li>
+            <a  href="/account/cplogout/"><i class="fa fa-cog"></i> {% trans "Logout" %}</a>
+        </li>
+    {% endif %}
+</ul>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <form  method="post" action="/account/loadcsvfile/" enctype='multipart/form-data' >
+                <legend>{% trans "Upload CSV File" %}</legend>
+                {% if success %}
+                    <div class="alert alert-success">
+                          Csv file has been uploaded.!!
+                     </div>
+                {% endif %}
+                {% csrf_token %}
+                <div class="form-group col-sm-12">
+                     <label for="inputFile">File Input: </label>
+                    <input type="file" name="csvfile" class="form-control"  accept=".csv" required="required"  />
+                </div>
+                <button type="submit" onclick="spinnerOn()" class="btn btn-primary">Import CSV File</button>
+            </form>
+        </div>
+
+    </div>
+
+
+<div class="cover" id="cover" >
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw" style="    display: block;margin: 17% auto 0;color: white;"></i>
+    <span class="sr-only">Loading...</span>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+<script>
+<!-- When server take time to load , loader will work -->
+    function spinnerOn()
+    {
+       document.getElementById('cover').style.display="block";
+    }
+</script>
+
+{% endblock %}
+
+{% block footer %}{% include "_footer.html" %}{%endblock%}
