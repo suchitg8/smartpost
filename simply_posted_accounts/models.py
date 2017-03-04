@@ -82,6 +82,9 @@ class ContentProvider(TimeStampedModel):
         verbose_name=_("password"),
         help_text=_("Enter the password (min 8 character)")
     )
+    customer_id = models.CharField(
+        max_length=80,default=None, null=True, blank=True
+    )
     active = models.BooleanField(default=True)
 
 

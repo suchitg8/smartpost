@@ -28,7 +28,8 @@ urlpatterns = [
     url(r"^account/cplogout/$", simply_posted_accounts.views.ContentProviderLogoutView.as_view(), name="cplogout"),
     url(r"^account/cpresetpassword/$", simply_posted_accounts.views.ContentProviderResetPasswordView.as_view(), name="cpresetpassword"),
 
-
+    url(r"^stripe-form/$", simply_posted_accounts.views.StripeForm.as_view(),name="stripe-form"),
+    url(r"^stripe-store-detail/$", simply_posted_accounts.views.StripeDetailStore,name="stripe-form"),
 
     url(r"^account/", include("account.urls")),
     url(r"^payments/", include("pinax.stripe.urls")),

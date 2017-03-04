@@ -21,6 +21,18 @@ from django.utils.translation import ugettext_lazy as _
 import csv
 import codecs
 
+# For stripe add
+import os
+
+import stripe
+
+stripe_keys = {
+  'secret_key': settings.PINAX_STRIPE_SECRET_KEY,
+  'publishable_key': settings.PINAX_STRIPE_PUBLIC_KEY
+}
+
+stripe.api_key = stripe_keys['secret_key']
+
 
 def social_profile_settings(request):
     user = request.user
@@ -451,3 +463,36 @@ class LoadCSVFileView(View):
             pass
         return render(
             request, self.template_name, context)
+
+
+# Stripe Detail add
+class StripeForm(View):
+    template_name = "stripeform.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {
+        }
+        return render(request, self.template_name, context)
+
+# Storing stripe customer id in content provider with user's username
+def StripeDetailStore(request):
+    context = {}
+
+    customer = stripe.Customer.create(
+        email=request.user.email,
+        source=request.POST['stripeToken']
+    )
+    contentprovider_obj =  ContentProvider()
+    contentprovider_obj.customer_id = customer.id
+    contentprovider_obj.email = request.user.email
+    contentprovider_obj.save()
+    context['success']=1
+
+    # charge = stripe.Charge.create(
+    #     customer=customer.id,
+    #     amount=amount,
+    #     currency='usd',
+    #     description='Flask Charge'
+    # )
+
+    return render(request,"stripeform.html", context)
