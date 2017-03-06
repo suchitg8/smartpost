@@ -5,14 +5,14 @@ import twitter
 
 class FacebookPublishingService:
   
-  def __init__(self, profile):
+  def __init__(self, profile, post):
     self.profile = profile
     self.base_url = "https://graph.facebook.com/v2.8/"
+    self.params = { 'access_token': profile.extra_data['access_token'], 'link': post.blog_link }
 
   def post_to_wall(self):
     url = self.base_url + self.profile.extra_data['id'] + "/feed"
-    params = { 'access_token': self.profile.extra_data['access_token'], 'message': 'api test', 'link': "http://www.example.com" }
-    response = requests.post(url, params=params)
+    response = requests.post(url, params=self.params)
     return response
 
   def get_groups(self):
@@ -23,8 +23,7 @@ class FacebookPublishingService:
 
   def post_to_group(self, group_id='1783628805298621'):
     url = self.base_url + group_id + "/feed"
-    params = { 'access_token': self.profile.extra_data['access_token'], 'message': 'api test', 'link': "http://www.example.com" }
-    response = requests.post(url, params=params)
+    response = requests.post(url, params=self.params)
     return response
 
   def post_to_groups(self, group_ids=['1783628805298621']):
@@ -40,8 +39,7 @@ class FacebookPublishingService:
 
   def post_to_page(self, page_id='154745755042534'):
     url = self.base_url + page_id + "/feed"
-    params = { 'access_token': self.profile.extra_data['access_token'], 'message': 'api test', 'link': "http://www.example.com" }
-    response = requests.post(url, params=params)
+    response = requests.post(url, params=self.params)
     return response
 
   def post_to_pages(self, page_ids=['154745755042534', '643185905866111']):
@@ -56,31 +54,28 @@ class FacebookPublishingService:
 
 class LinkedInPublishingService:
 
-  def __init__(self, profile):
+  def __init__(self, profile, post):
     self.profile = profile
     self.url = "https://api.linkedin.com/v1/people/~/shares?format=json"
     self.format_param = "?format=json"
     self.headers = { 'x-li-format': 'json', 'Authorization': "Bearer " + profile.extra_data['access_token'] }
-
-  def share(self):
-    data = {
-      "comment": "API test",
+    self.params = {
       "content": {
-        "description": "description",
-        "title": "title",
-        "submitted-url": "http://www.test.com"
+        "title": post.corporate_title,
+        "submitted-url": post.blog_link
       },
       "visibility": {
         "code": "connections-only"
       }
     }
 
-    response = requests.post(self.url, headers=self.headers, json=data)
+  def share(self):
+    response = requests.post(self.url, headers=self.headers, json=self.params)
     return response
 
 class TwitterPublishingService:
 
-  def tweet(self, profile):
+  def tweet(self, profile, post):
     api = twitter.Api(
       consumer_key=settings.SOCIAL_AUTH_TWITTER_KEY,
       consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
@@ -88,5 +83,5 @@ class TwitterPublishingService:
       access_token_secret=profile.extra_data['access_token']['oauth_token_secret']
     )
 
-    post = api.PostUpdate('testing')
+    post = api.PostUpdate(post.corporate_title + " " + post.blog_link)
     return post
