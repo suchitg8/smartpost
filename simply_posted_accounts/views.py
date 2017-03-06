@@ -477,14 +477,14 @@ class StripeForm(View):
 # Storing stripe customer id in content provider with user's username
 def StripeDetailStore(request):
     context = {}
+    contentprovider_obj =  ContentProvider.objects.get(pk=request.session['contentprovider'])
 
     customer = stripe.Customer.create(
-        email=request.user.email,
+        email=request.POST['stripeEmail'],
         source=request.POST['stripeToken']
     )
-    contentprovider_obj =  ContentProvider()
+
     contentprovider_obj.customer_id = customer.id
-    contentprovider_obj.email = request.user.email
     contentprovider_obj.save()
     context['success']=1
 
