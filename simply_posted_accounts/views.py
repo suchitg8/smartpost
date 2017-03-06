@@ -7,7 +7,7 @@ from account.utils import default_redirect
 from account.conf import settings
 from account.models import EmailAddress
 from social_django.models import UserSocialAuth
-from simply_posted_accounts.models import ContentProvider , DBform
+from simply_posted_accounts.models import ContentProvider , Post
 from django.shortcuts import redirect
 import account.forms
 import account.views
@@ -444,14 +444,14 @@ class LoadCSVFileView(View):
                         if i!=0:
                             book = row
                             # Create object and add entries in database.
-                            dbform = DBform()
-                            dbform.playful_title = book[0]
-                            dbform.corporate_title = book[1]
-                            dbform.blog_link = book[2]
-                            dbform.image_link = book[3]
-                            dbform.category = book[4]
-                            dbform.contentprovider_id = request.session['contentprovider']
-                            dbform.save()
+                            post = Post()
+                            post.playful_title = book[0]
+                            post.corporate_title = book[1]
+                            post.blog_link = book[2]
+                            post.image_link = book[3]
+                            post.category = book[4]
+                            post.contentprovider_id = request.session['contentprovider']
+                            post.save()
                         i=i+1
                     context['success'] = 1
                     context['user'] = contentprovider
