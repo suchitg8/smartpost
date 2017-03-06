@@ -1,0 +1,33 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}SimplyPosted Portal | Real Estate Social Media Management{% endblock %}
+
+{% block body_class %}Stripe Form{% endblock %}
+
+{% block body_base %}
+    <section class="jumbotron">
+        <div class="container">
+         {% if success %}
+            <div class="alert alert-success">
+                          Stripe Account has been successfully Added.!!
+                     </div>
+            {% endif %}
+             <form action="/stripe-store-detail/" method="POST">
+    {% csrf_token %}
+<script
+  src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+  data-key="pk_test_o1dsX2IkC9qT7oLSRtorq44O"
+  data-amount="2000"
+  data-name="Stripe.com"
+  data-description="2 widgets"
+  data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+  data-locale="auto"
+  data-zip-code="true">
+</script>
+</form>
+        </div>
+    </section>
+{% endblock %}
+

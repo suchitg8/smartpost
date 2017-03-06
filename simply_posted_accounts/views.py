@@ -3,16 +3,36 @@ from django.views.generic.edit import FormView
 from account.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
 from account.utils import default_redirect
 from account.conf import settings
 from account.models import EmailAddress
 from social_django.models import UserSocialAuth
+from simply_posted_accounts.models import ContentProvider , DBform
+from django.shortcuts import redirect
 import account.forms
 import account.views
 import simply_posted_accounts.forms
 import requests
 import time
+
+# Added by vikrant
+from django.views.generic import View
+from django.utils.translation import ugettext_lazy as _
+import csv
+import codecs
+
+# For stripe add
+import os
+
+import stripe
+
+stripe_keys = {
+  'secret_key': settings.PINAX_STRIPE_SECRET_KEY,
+  'publishable_key': settings.PINAX_STRIPE_PUBLIC_KEY
+}
+
+stripe.api_key = stripe_keys['secret_key']
+
 
 def social_profile_settings(request):
     user = request.user
@@ -297,3 +317,182 @@ class ConfirmEmailView(account.views.ConfirmEmailView):
         super(ConfirmEmailView, self).after_confirmation(confirmation)
         self.create_social_report_project(confirmation)
         self.create_social_report_user(confirmation)
+
+
+# Code Writter By "Vikrant"
+# Login class for content writer
+class ContentProviderLoginView(View):
+    template_name = "account/cplogin.html"
+
+    def get_context_data(self):
+        context = {}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            if request.session['contentprovider']:
+                return redirect('/account/loadcsvfile/')
+        except Exception as e:
+            pass
+        return render(
+            request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        email=request.POST['email']
+        password = request.POST['password']
+        # password_enc = encrypt_val(password)
+        try:
+            user = ContentProvider.objects.get(email=email,password=password,active=1)
+            request.session['contentprovider']=user.id
+            return redirect('/account/loadcsvfile/')
+        except Exception as e:
+            context['error']="Invalid Username or Password"
+            pass
+        return render(
+            request, self.template_name, context)
+# Logout Class for content writer
+class ContentProviderLogoutView(View):
+    template_name = "account/cplogin.html"
+
+    def get_context_data(self):
+        context = {}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            # Delete Session that is created in login
+            del request.session['contentprovider']
+        except Exception as e:
+            pass
+        return render(
+            request, self.template_name, context)
+
+# Reset Password
+class ContentProviderResetPasswordView(View):
+    template_name = "account/cpresetpassword.html"
+
+    def get_context_data(self):
+        context = {}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            if request.session['contentprovider']:
+                contentprovider = ContentProvider.objects.get(id=int(request.session['contentprovider']))
+                context['user'] = contentprovider
+                return render(request, self.template_name, context)
+        except:
+            pass
+        return redirect('/account/cplogin/')
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        password = request.POST['password']
+        # password_enc = encrypt_val(password)
+        contentprovider = ContentProvider.objects.get(id=int(request.session['contentprovider']))
+        context['user']=contentprovider
+        try:
+            user = ContentProvider.objects.get(id=int(request.session['contentprovider']))
+            user.password = password
+            user.save()
+            context={
+                'user':user,
+                'success':'1',
+            }
+        except Exception as e:
+            context['error']="Invalid Username or Password"
+            pass
+        return render(request, self.template_name, context)
+
+# Load Csv class for content writer
+class LoadCSVFileView(View):
+    template_name = "account/loadcsv.html"
+
+    def get_context_data(self):
+        context = {}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            if request.session['contentprovider']:
+                contentprovider =  ContentProvider.objects.get(id=int(request.session['contentprovider']))
+                context['user'] = contentprovider
+                return render(request, self.template_name, context)
+        except:
+            pass
+        return redirect('/account/cplogin/')
+
+    # After import csv file
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            if 'csvfile' in request.FILES:
+                csv_file = request.FILES.get('csvfile')
+                contentprovider = ContentProvider.objects.get(id=int(request.session['contentprovider']))
+                try:
+                    dialect = csv.Sniffer().sniff(codecs.EncodedFile(csv_file, "utf-8").read())
+                    csv_file.open()
+                    reader = csv.reader(codecs.EncodedFile(csv_file, "utf-8"), delimiter=',', dialect=dialect)
+                    # Skip First Element i=0 in which [1:] is not working
+                    i = 0
+                    for row in reader:
+                        if i!=0:
+                            book = row
+                            # Create object and add entries in database.
+                            dbform = DBform()
+                            dbform.playful_title = book[0]
+                            dbform.corporate_title = book[1]
+                            dbform.blog_link = book[2]
+                            dbform.image_link = book[3]
+                            dbform.category = book[4]
+                            dbform.contentprovider_id = request.session['contentprovider']
+                            dbform.save()
+                        i=i+1
+                    context['success'] = 1
+                    context['user'] = contentprovider
+                except Exception as e:
+                    pass
+
+        except Exception as e:
+            print e
+            pass
+        return render(
+            request, self.template_name, context)
+
+
+# Stripe Detail add
+class StripeForm(View):
+    template_name = "stripeform.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {
+        }
+        return render(request, self.template_name, context)
+
+# Storing stripe customer id in content provider with user's username
+def StripeDetailStore(request):
+    context = {}
+    contentprovider_obj =  ContentProvider.objects.get(pk=request.session['contentprovider'])
+
+    customer = stripe.Customer.create(
+        email=request.POST['stripeEmail'],
+        source=request.POST['stripeToken']
+    )
+
+    contentprovider_obj.customer_id = customer.id
+    contentprovider_obj.save()
+    context['success']=1
+
+    # charge = stripe.Charge.create(
+    #     customer=customer.id,
+    #     amount=amount,
+    #     currency='usd',
+    #     description='Flask Charge'
+    # )
+
+    return render(request,"stripeform.html", context)
