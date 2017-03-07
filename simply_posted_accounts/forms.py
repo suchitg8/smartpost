@@ -3,7 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from account.conf import settings
 from simply_posted_accounts.models import business_type_choices, \
     market_type_choices, \
-    temp_type_choices
+    temp_type_choices, \
+    category_choices
 import account.forms
 
 try:
@@ -64,6 +65,11 @@ class VoiceForm(account.forms.SignupForm):
         choices=temp_type_choices,
         required=False)
 
+    selected_categories = forms.MultipleChoiceField(
+        label = ("Real Estate Categories"),
+        choices = category_choices,
+        required = True)
+
     about_business = forms.CharField(
         label=_('Tell us about your business? Tell us about your IDEAL clients. '
                 'What made them great?'),
@@ -80,7 +86,7 @@ class VoiceForm(account.forms.SignupForm):
 
     def __init__(self, *args, **kwargs):
         super(VoiceForm, self).__init__(*args, **kwargs)
-        field_order = ["business_type", "market_type", "temp_type",
+        field_order = ["business_type", "market_type", "temp_type", "selected_categories",
                        "about_business", "about_topics"]
         if not OrderedDict or hasattr(self.fields, "keyOrder"):
             self.fields.keyOrder = field_order

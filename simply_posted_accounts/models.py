@@ -15,20 +15,36 @@ from django.utils.translation import ugettext_lazy as _
 
 business_type_choices = (
     ('', '---'),
-    ('promotional', 'Promotional'),
-    ('topical', 'Topical'))
+    (1, 'Topical'),
+    (2, 'Mostly Topical'),
+    (3, 'Slightly Topical'),
+    (4, 'Slightly Promotional'),
+    (5, 'Mostly Promotional'),
+    (6, 'Promotional'))
 
 market_type_choices = (
     ('', '---'),
-    ('niche', 'Niche market (age, income, location'),
-    ('general', 'General market (anyone looking for real estate'))
+    (1, 'General'),
+    (2, 'Mostly General'),
+    (3, 'Slightly General'),
+    (4, 'Slightly Local'),
+    (5, 'Mostly Local'),
+    (6, 'Local'))
 
 temp_type_choices = (
     ('', '---'),
-    ('corporate', 'Corporate'),
-    ('between', 'Somewhere in between'),
-    ('lighthearted', 'Lighthearted'))
+    (1, 'Lighthearted'),
+    (2, 'Mostly Lighthearted'),
+    (3, 'Slightly Lighthearted'),
+    (4, 'Slightly Corporate'),
+    (5, 'Mostly Corporate'),
+    (6, 'Corporate'))
 
+category_choices = (
+    (1, '1'),
+    (2, '2'),
+    (3, '3')
+)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
@@ -40,6 +56,7 @@ class UserProfile(models.Model):
     temp_type = models.CharField(max_length=50)
     about_business = models.CharField(max_length=100)
     about_topics = models.CharField(max_length=100)
+    selected_categories = JSONField(default=[])
 
     class Meta:
         verbose_name = 'Simply Posted Customer Profiles'
@@ -129,3 +146,4 @@ class Post(TimeStampedModel):
         help_text=_("Enter the category")
     )
     contentprovider = models.ForeignKey(ContentProvider, default=None, null=True, blank=True)
+    users = models.ManyToManyField(User, through='simply_posted_calendar.Publication')

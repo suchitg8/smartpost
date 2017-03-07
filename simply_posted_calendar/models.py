@@ -12,3 +12,4 @@ class Publication(models.Model):
     approved = models.NullBooleanField()
     substituted_for = models.ForeignKey('self', null=True, blank=True)
     reject_count = models.PositiveIntegerField(default=0)
+    corporate_title = models.BooleanField(default=True)

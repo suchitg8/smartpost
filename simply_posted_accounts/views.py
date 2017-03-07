@@ -135,6 +135,8 @@ class VoiceView(LoginRequiredMixin, FormView):
             initial["market_type"] = self.request.user.profile.market_type
         if self.request.user.profile.temp_type:
             initial["temp_type"] = self.request.user.profile.temp_type
+        if self.request.user.profile.selected_categories:
+            initial["selected_categories"] = self.request.user.profile.selected_categories
         if self.request.user.profile.about_business:
             initial["about_business"] = self.request.user.profile.about_business
         if self.request.user.profile.about_business:
@@ -149,6 +151,8 @@ class VoiceView(LoginRequiredMixin, FormView):
            profile.market_type = form.cleaned_data["market_type"]
         if "temp_type" in form.cleaned_data:
             profile.temp_type = form.cleaned_data["temp_type"]
+        if "selected_categories" in form.cleaned_data:
+            profile.selected_categories = form.cleaned_data["selected_categories"]
         if "about_business" in form.cleaned_data:
             profile.about_business = form.cleaned_data["about_business"]
         if "about_topics" in form.cleaned_data:
