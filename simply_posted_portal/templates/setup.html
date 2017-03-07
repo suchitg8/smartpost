@@ -2,13 +2,6 @@
 
 {% load i18n %}
 
-{% block extra_head_base %}
-	<link rel="stylesheet" href="/site_media/static/css/setup/jquery-ui.min.css" />
-	<link rel="stylesheet" href="/site_media/static/css/setup/jquery-steps.css" />
-	<link rel="stylesheet" href="/site_media/static/css/setup/style.css" />
-{% endblock %}
-
-
 {% block body_base %}
 
 <!--	<div id="sp-header">
@@ -233,52 +226,9 @@
 	<input type="submit" style="display:none;" />
 	</form>
 	
-	<script language="javascript" src="/site_media/static/js/setup/jquery-1.12.4.js"></script>
+<!--<script language="javascript" src="/site_media/static/js/setup/jquery-1.12.4.js"></script>
 	<script language="javascript" src="/site_media/static/js/setup/jquery-ui.min.js"> </script>
 	<script language="javascript" src="/site_media/static/js/setup/jquery.steps.js"> </script>
-	<script language="javascript" src="/site_media/static/js/setup/jquery.validate.min.js"> </script>
-
-	<script language="javascript">
-		(function($) {
-			var g_skipper;
-			var wizard = $("#wizard").steps({
-				onStepChanging: function(event, currentIndex, newIndex) {
-					console.log(currentIndex); 
-					var skipper = $("#wizard > div.actions.clearfix > ul > li:nth-child(2) > a"); 
-					g_skipper = skipper;
-					var ok=true;
-					$("#wizard-p-"+currentIndex+" input").each(function() {
-						ok = validator.element(this);
-					}); 
-					if(newIndex >= 5 && ok) {
-						skipper.addClass("skip");
-						skipper.text("Skip this step");
-					} else {
-						skipper.removeClass("skip"); 
-						skipper.text("Continue");
-					}
-					return ok;
-				}
-			});
-			$("input[type=range]").each(function() {
-				$(this).next().children().first().slider({
-					range: "min", 
-					min: 1,
-					value: 27,
-					max: 100, 
-					slide: function(event, ui) {
-						$(this).parent().prev().val(ui.value); 
-					}
-				}); 
-				$(this).val($(this).next().children().first().slider("value")); 
-			}); 
-			var validator = $("#form-id").validate();
-			$(".sixth-step .plan-box").click(function() {
-				$("#plan-type").val($(this).parent().prevAll().length - 3);
-				console.log($(this).parent().prevAll().length - 3);
-				g_skipper.click();
-			}); 
-		})(jQuery); 
-	</script>
+	<script language="javascript" src="/site_media/static/js/setup/jquery.validate.min.js"> </script> -->
 
 {% endblock %}

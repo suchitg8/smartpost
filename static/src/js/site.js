@@ -4,6 +4,11 @@ window.jQuery = window.$ = require('jquery');
 const $ = window.$;
 
 require('bootstrap');
+require('./jquery-1.12.4');
+require('./jquery-ui.min');
+require('./jquery.steps');
+require('./jquery.validate.min');
+require('./source');
 
 $(() => {
   $('[data-toggle="popover"]').popover();
