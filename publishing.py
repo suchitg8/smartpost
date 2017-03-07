@@ -1,3 +1,5 @@
+from simply_posted_accounts.models import SocialProfile
+
 from django.conf import settings
 
 import requests
@@ -7,6 +9,7 @@ class FacebookPublishingService:
   
   def __init__(self, profile, post):
     self.profile = profile
+    self.facebook_data = SocialProfile.objects.get(social_auth=profile).facebook_data
     self.base_url = "https://graph.facebook.com/v2.8/"
     self.params = { 'access_token': profile.extra_data['access_token'], 'link': post.blog_link }
 
@@ -21,12 +24,14 @@ class FacebookPublishingService:
     response = requests.get(url, params=params)
     return response
 
-  def post_to_group(self, group_id='1783628805298621'):
+  def post_to_group(self, group_id):
     url = self.base_url + group_id + "/feed"
     response = requests.post(url, params=self.params)
     return response
 
-  def post_to_groups(self, group_ids=['1783628805298621']):
+  def post_to_groups(self):
+    group_ids = self.facebook_data['groups']
+
     for group in group_ids:
       self.post_to_group(group)
     return None
@@ -37,20 +42,22 @@ class FacebookPublishingService:
     response = requests.get(url, params=params)
     return response
 
-  def post_to_page(self, page_id='154745755042534'):
+  def post_to_page(self, page_id):
     url = self.base_url + page_id + "/feed"
     response = requests.post(url, params=self.params)
     return response
 
-  def post_to_pages(self, page_ids=['154745755042534', '643185905866111']):
+  def post_to_pages(self):
+    page_ids = self.facebook_data['pages']
+
     for page in page_ids:
       self.post_to_page(page)
     return None
 
-  def post_to_all(self, group_ids=['1783628805298621'], page_ids=['154745755042534', '643185905866111']):
+  def post_to_all(self):
     self.post_to_wall()
-    self.post_to_groups(group_ids)
-    self.post_to_pages(page_ids)
+    self.post_to_groups()
+    self.post_to_pages()
 
 class LinkedInPublishingService:
 

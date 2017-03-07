@@ -1,9 +1,14 @@
 from __future__ import unicode_literals
 
+from django.contrib.postgres.fields import JSONField
+
 from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
+from social_django.models import UserSocialAuth
+
 # Added by vikrant
 from model_utils.models import TimeStampedModel
 from django.utils.translation import ugettext_lazy as _
@@ -59,6 +64,10 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = BaseUserAdmin.list_display + ('company',)
     search_fields = BaseUserAdmin.search_fields + ('profile__company',)
+
+class SocialProfile(models.Model):
+    social_auth = models.OneToOneField(UserSocialAuth)
+    facebook_data = JSONField()
 
 # Code added by vikrant
 class ContentProvider(TimeStampedModel):
