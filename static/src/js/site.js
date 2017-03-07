@@ -7,15 +7,28 @@ require('bootstrap');
 require('fullcalendar');
 
 $(() => {
+  const popoverContent = event => {
+    let buttons = '';
+    console.log(event);
+
+    if (event.approved === null) {
+      buttons = `<button type='button' class='btn btn-primary pull-left btn-sm js-approve-content'>Approve</button><button type='button' class='btn btn-danger pull-right btn-sm js-reject-content'>Reject</button>`;
+    }
+  
+    return `<div class='date'>${event.start.format('MMMM Do YYYY, h:mm:ss a')}</div>
+     <div class='description'>${event.content}</div>
+     <div class='buttons'>${buttons}</div>`;
+  };
+
   $('#calendar').fullCalendar({
-    header: {
-      left: ''
+    viewRender: view => {
+      $('.fc-left h2').html('<small>Manage your social media publications for ' + view.title + '</small>');
     },
     events: '/publications/get_all',
     eventClick(event) {
       const options = {
         title: event.title,
-        content: `<div class='date'>${event.start.format('MMMM Do YYYY, h:mm:ss a')}</div><div class='description'>${event.content}</div><div class='buttons'><button type='button' class='btn btn-primary pull-left btn-sm js-approve-content'>Approve</button><button type='button' class='btn btn-danger pull-right btn-sm js-reject-content'>Reject</button></div>`,
+        content: popoverContent(event),
         html: true,
         placement: 'top',
         template: `<div class="popover calendar-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" data-id="${event.id}"></div></div>`,
@@ -48,7 +61,10 @@ $(() => {
   $('body').on('click', '.js-reject-content', e => {
     updateEvent(e, 'reject', data => {
       $('#calendar').fullCalendar('refetchEvents');
-      console.log(data);
+
+      if (!data.length) {
+        $('#support-modal').modal();
+      }
     });
   });
 });

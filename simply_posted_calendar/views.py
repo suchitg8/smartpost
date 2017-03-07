@@ -1,23 +1,30 @@
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 
+from django.db.models import F
+
 from django.contrib.auth.models import User
 from simply_posted_calendar.models import Publication
 
+from publishing import PublishingService
+
 def get_all(request):
-    publications = to_dict(Publication.objects.all().exclude(approved=False))
+    publications = to_dict(Publication.objects.filter(user=request.user))
     return JsonResponse(publications, safe=False)
 
 def approve(request, pk):
     publication = Publication.objects.filter(pk=pk)
     publication.update(approved=True) 
 
+    profile = request.user.social_auth
+    PublishingService(profile, publication.first().post).publish_post()
+
     data = publication.values().first()
     return JsonResponse(data)
 
 def reject(request, pk):
     publication = Publication.objects.filter(pk=pk)
-    publication.update(approved=False)
+    publication.update(approved=False, reject_count=F('reject_count') + 1)
 
     substituted_post = substitute(publication.first())
     if substituted_post:
@@ -36,16 +43,17 @@ def to_dict(publications):
     result = []
     for publication in publications:
         color = '#449d44' if publication.approved else '#c9302c' if publication.approved == False else '#337ab7'
-        publication_data = {'title': 'test', 'content': 'test', 'start': publication.publication_date.isoformat(), 'id': publication.id, 'color': color}
+        publication_data = {'title': publication.post.corporate_title, 'content': publication.post.blog_link, 'start': publication.publication_date.isoformat(), 'id': publication.id, 'color': color, 'reject_count': publication.reject_count, 'approved': publication.approved}
         result.append(publication_data)
 
     return result
 
 def substitute(publication):
-    if publication.substituted_for and publication.substituted_for.substituted_for:
+    if publication.reject_count >= 3:
         return False
 
-    user = publication.user
-    substitute = Publication.objects.create(publication_date=publication.publication_date, user=publication.user, substituted_for=publication)
 
-    return substitute
+    publication.post_id = publication.post.id + 1
+    publication.save()
+
+    return publication

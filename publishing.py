@@ -82,13 +82,28 @@ class LinkedInPublishingService:
 
 class TwitterPublishingService:
 
-  def tweet(self, profile, post):
-    api = twitter.Api(
+  def __init__(self, profile, post):
+    self.post = post
+    self.api = twitter.Api(
       consumer_key=settings.SOCIAL_AUTH_TWITTER_KEY,
       consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
       access_token_key=profile.extra_data['access_token']['oauth_token'],
       access_token_secret=profile.extra_data['access_token']['oauth_token_secret']
     )
 
-    post = api.PostUpdate(post.corporate_title + " " + post.blog_link)
-    return post
+  def tweet(self):
+    response = self.api.PostUpdate(self.post.corporate_title + " " + self.post.blog_link)
+    return response
+
+class PublishingService:
+
+  def __init__(self, profiles, post):
+    self.facebook = FacebookPublishingService(profiles.get(provider='facebook'), post)
+    self.linkedin = LinkedInPublishingService(profiles.get(provider='linkedin-oauth2'), post)
+    self.twitter  = TwitterPublishingService(profiles.get(provider='twitter'), post)
+
+  def publish_post(self):
+    self.facebook.post_to_all()
+    self.linkedin.share()
+    self.twitter.tweet()
+
