@@ -98,12 +98,18 @@ class TwitterPublishingService:
 class PublishingService:
 
   def __init__(self, profiles, post):
-    self.facebook = FacebookPublishingService(profiles.get(provider='facebook'), post)
-    self.linkedin = LinkedInPublishingService(profiles.get(provider='linkedin-oauth2'), post)
-    self.twitter  = TwitterPublishingService(profiles.get(provider='twitter'), post)
+    if profiles.filter(provider='facebook').first():
+        self.facebook = FacebookPublishingService(profiles.get(provider='facebook'), post)
+    if profiles.filter(provider='linkedin-oauth2').first():
+        self.linkedin = LinkedInPublishingService(profiles.get(provider='linkedin-oauth2'), post)
+    if profiles.filter(provider='twitter').first():
+        self.twitter  = TwitterPublishingService(profiles.get(provider='twitter'), post)
 
   def publish_post(self):
-    self.facebook.post_to_all()
-    self.linkedin.share()
-    self.twitter.tweet()
+    if hasattr(self, 'facebook'):
+        self.facebook.post_to_all()
+    if hasattr(self, 'linkedin'):
+        self.linkedin.share()
+    if hasattr(self, 'twitter'):
+        self.twitter.tweet()
 
