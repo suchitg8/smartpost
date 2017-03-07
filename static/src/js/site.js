@@ -67,4 +67,14 @@ $(() => {
       }
     });
   });
+
+  $('.js-get-posts').on('click', () => {
+    $.ajax({
+      url: '/publications/get_new/',
+      method: 'POST',
+      success: () => {
+        $('#calendar').fullCalendar('refetchEvents');
+      }
+    });
+  });
 });

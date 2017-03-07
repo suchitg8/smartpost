@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from simply_posted_calendar.models import Publication
 
 from publishing import PublishingService
+from select_posts import ContentSelectionService
 
 def get_all(request):
     publications = to_dict(Publication.objects.filter(user=request.user))
@@ -35,9 +36,8 @@ def reject(request, pk):
     return JsonResponse(data, safe=False)
 
 def get_new(request):
-    user = User.objects.first()
-    publications = [Publication(user=user, publication_date=datetime.datetime.now() + datetime.timedelta(days=n+1)) for n in range(10)]
-    return JsonResponse({ "publications": Publication.objects.all().values() })
+    publications = ContentSelectionService(request.user).make_publications()
+    return JsonResponse(to_dict(publications), safe=False)
 
 def to_dict(publications):
     result = []
