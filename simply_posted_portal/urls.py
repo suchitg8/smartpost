@@ -22,7 +22,6 @@ urlpatterns = [
     url(r"^account/voice/$", simply_posted_accounts.views.VoiceView.as_view(), name="voice_settings"),
     url(r"^account/signup/$", simply_posted_accounts.views.SignupView.as_view(template_name="account/signup.html"), name="account_signup"),
     url(r"^account/login/$", simply_posted_accounts.views.LoginView.as_view(), name="account_signup"),
-	url(r"^setup/$", simply_posted_accounts.views.setup, name="account_setup"), 
     # Add content provider account : Added by vikrant
     url(r"^account/cplogin/$", simply_posted_accounts.views.ContentProviderLoginView.as_view(), name="cplogin"),
     url(r"^account/loadcsvfile/$", simply_posted_accounts.views.LoadCSVFileView.as_view(), name="loadcsvfile"),

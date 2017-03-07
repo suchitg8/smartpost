@@ -34,9 +34,6 @@ stripe_keys = {
 stripe.api_key = stripe_keys['secret_key']
 
 
-def setup(request):
-    return render(request, 'setup.html')
-
 def social_profile_settings(request):
     user = request.user
 
