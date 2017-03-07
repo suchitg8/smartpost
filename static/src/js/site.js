@@ -22,7 +22,7 @@ $(() => {
 
   $('#calendar').fullCalendar({
     viewRender: view => {
-      $('.fc-left h2').html('<small>Manage your social media publications for ' + view.title + '</small>');
+      $('.fc-left h2').html(`<small>Manage your social media publications for ${view.title}</small>`);
     },
     events: '/publications/get_all',
     eventClick(event) {
