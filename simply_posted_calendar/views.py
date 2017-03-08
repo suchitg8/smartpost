@@ -5,6 +5,7 @@ from django.db.models import F
 
 from django.contrib.auth.models import User
 from simply_posted_calendar.models import Publication
+from simply_posted_accounts.models import Post
 
 from publishing import PublishingService
 from select_posts import ContentSelectionService
@@ -22,7 +23,7 @@ def approve(request, pk):
 
 def reject(request, pk):
     publication = Publication.objects.filter(pk=pk)
-    publication.update(approved=False, reject_count=F('reject_count') + 1)
+    publication.update(reject_count=F('reject_count') + 1)
 
     substituted_post = substitute(publication.first())
     if substituted_post:
@@ -49,10 +50,13 @@ def to_dict(publications):
 
 def substitute(publication):
     if publication.reject_count >= 3:
+        publication.approved = False
+        publication.save()
         return False
 
 
-    publication.post_id = publication.post.id + 1
+    new_id = Post.objects.filter(category=publication.post.category).exclude(users=publication.user).first()
+    publication.post_id = new_id
     publication.save()
 
     return publication
