@@ -21,6 +21,17 @@ def approve(request, pk):
     data = publication.values().first()
     return JsonResponse(data)
 
+def publish(request, pk):
+    publication = Publication.objects.filter(pk=pk)
+    publication.update(approved=True) 
+
+    profile = request.user.social_auth
+    PublishingService(profile, publication.first().post).publish_post()
+    publication.update(published=True)
+
+    data = publication.values().first()
+    return JsonResponse(data)
+
 def reject(request, pk):
     publication = Publication.objects.filter(pk=pk)
     publication.update(reject_count=F('reject_count') + 1)

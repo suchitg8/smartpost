@@ -17,7 +17,8 @@ $(() => {
   
     return `<div class='date'>${event.start.format('MMMM Do YYYY, h:mm:ss a')}</div>
      <div class='description'>${event.content}</div>
-     <div class='buttons'>${buttons}</div>`;
+     <div class='buttons'>${buttons}</div>
+     <div style="margin-top:10px"><a href="" class="js-publish pull-right"><small>Publish now</small></a></div>`;
   };
 
   $('#calendar').fullCalendar({
@@ -54,6 +55,14 @@ $(() => {
 
   $('body').on('click', '.js-approve-content', e => {
     updateEvent(e, 'approve', () => {
+      $('#calendar').fullCalendar('refetchEvents');
+    });
+  });
+
+  $('body').on('click', '.js-publish', e => {
+    e.preventDefault();
+
+    updateEvent(e, 'publish', () => {
       $('#calendar').fullCalendar('refetchEvents');
     });
   });
