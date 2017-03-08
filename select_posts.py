@@ -87,5 +87,6 @@ class ContentSelectionService:
 
     for publication in random.sample(publications, playful_count):
       publication.corporate_title = False
+      publication.save()
 
     return publications

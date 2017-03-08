@@ -43,7 +43,9 @@ def to_dict(publications):
     result = []
     for publication in publications:
         color = '#449d44' if publication.approved else '#c9302c' if publication.approved == False else '#337ab7'
-        publication_data = {'title': publication.post.corporate_title, 'content': publication.post.blog_link, 'start': publication.publication_date.isoformat(), 'id': publication.id, 'color': color, 'reject_count': publication.reject_count, 'approved': publication.approved}
+        title = publication.post.corporate_title if publication.corporate_title else publication.post.playful_title
+
+        publication_data = {'title': title, 'content': publication.post.blog_link, 'start': publication.publication_date.isoformat(), 'id': publication.id, 'color': color, 'reject_count': publication.reject_count, 'approved': publication.approved}
         result.append(publication_data)
 
     return result
