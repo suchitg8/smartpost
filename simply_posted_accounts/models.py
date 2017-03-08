@@ -41,9 +41,14 @@ temp_type_choices = (
     (6, 'Corporate'))
 
 category_choices = (
-    (1, '1'),
-    (2, '2'),
-    (3, '3')
+    (1, 'Home Selling'),
+    (2, 'Home Buying'),
+    (3, 'Foreclosure'),
+    (4, 'Investing'),
+    (5, 'First Time Home Buyers'),
+    (6, 'Realtor'),
+    (7, 'Homeownership'),
+    (8, 'Property Management')
 )
 
 class UserProfile(models.Model):
