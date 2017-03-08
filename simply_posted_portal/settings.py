@@ -1,6 +1,5 @@
 import os
 
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = PACKAGE_ROOT
@@ -218,7 +217,7 @@ SOCIAL_AUTH_TWITTER_SECRET = os.environ.get("SOCIAL_AUTH_TWITTER_SECRET")
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get("SOCIAL_AUTH_FACEBOOK_KEY")
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get("SOCIAL_AUTH_FACEBOOK_SECRET")
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['publish_actions', 'user_managed_groups', 'manage_pages', 'publish_pages']
-SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('first_name', 'first_name'), ('last_name', 'last_name')]
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('first_name', 'first_name'), ('last_name', 'last_name'), ('groups', 'groups'), ('pages', 'pages')]
 
 # Instagram Authentication
 SOCIAL_AUTH_INSTAGRAM_KEY = os.environ.get("SOCIAL_AUTH_INSTAGRAM_KEY")
@@ -246,4 +245,18 @@ AUTHENTICATION_BACKENDS = [
     "social_core.backends.linkedin.LinkedinOAuth2",
     "social_core.backends.pinterest.PinterestOAuth2",
     "account.auth_backends.EmailAuthenticationBackend",
+]
+
+SOCIAL_AUTH_PIPELINE = [
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'publishing.get_groups',
+    'publishing.get_pages',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
 ]

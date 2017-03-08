@@ -82,10 +82,6 @@ class UserAdmin(BaseUserAdmin):
     list_display = BaseUserAdmin.list_display + ('company',)
     search_fields = BaseUserAdmin.search_fields + ('profile__company',)
 
-class SocialProfile(models.Model):
-    social_auth = models.OneToOneField(UserSocialAuth)
-    facebook_data = JSONField()
-
 # Code added by vikrant
 class ContentProvider(TimeStampedModel):
     first_name = models.CharField(
