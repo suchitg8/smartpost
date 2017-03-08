@@ -143,3 +143,7 @@ class Post(TimeStampedModel):
     )
     contentprovider = models.ForeignKey(ContentProvider, default=None, null=True, blank=True)
     users = models.ManyToManyField(User, through='simply_posted_calendar.Publication')
+
+class RejectedPost(models.Model):
+    post = models.ForeignKey(Post)
+    users = models.ManyToManyField(User, related_name="rejected_posts")

@@ -5,7 +5,7 @@ from django.db.models import F
 
 from django.contrib.auth.models import User
 from simply_posted_calendar.models import Publication
-from simply_posted_accounts.models import Post
+from simply_posted_accounts.models import Post, RejectedPost
 
 from publishing import PublishingService
 from select_posts import ContentSelectionService
@@ -35,6 +35,7 @@ def publish(request, pk):
 def reject(request, pk):
     publication = Publication.objects.filter(pk=pk)
     publication.update(reject_count=F('reject_count') + 1)
+    request.user.rejected_posts.create(post=publication.first().post)
 
     substituted_post = substitute(publication.first())
     if substituted_post:
@@ -66,7 +67,7 @@ def substitute(publication):
         return False
 
 
-    new_id = Post.objects.filter(category=publication.post.category).exclude(users=publication.user).first()
+    new_id = Post.objects.filter(category=publication.post.category).exclude(users=publication.user).exclude(id__in=publication.user.rejected_posts.values_list('post_id', flat=True)).first()
     publication.post_id = new_id
     publication.save()
 
