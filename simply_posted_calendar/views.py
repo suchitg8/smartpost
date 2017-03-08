@@ -17,9 +17,6 @@ def approve(request, pk):
     publication = Publication.objects.filter(pk=pk)
     publication.update(approved=True) 
 
-    profile = request.user.social_auth
-    PublishingService(profile, publication.first().post).publish_post()
-
     data = publication.values().first()
     return JsonResponse(data)
 
