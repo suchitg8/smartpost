@@ -118,7 +118,7 @@
 
 
 .calendar-popover {
-  .popover {
+  &.popover {
     min-width: 200px;
   }
 
@@ -141,6 +141,10 @@
       overflow: hidden;
     }
   }
+}
+
+.fc-view, .fc-day-grid-container {
+  overflow: visible !important;
 }
 
 @media (max-width: 680px) {
