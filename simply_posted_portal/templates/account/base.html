@@ -5,39 +5,70 @@
 {% block body_class %}account{% endblock %}
 
 {% block subnav %}
-<div class="panel panel-default">
-    <div class="panel-heading"><strong>{% trans "Social" %}</strong></div>
-    <div class="list-group">
-        <a class="list-group-item account-posting-schedule" href="{% url "calendar_current_month" %}">
-            {% trans "Calendar" %}
-        </a>
-        <a class="list-group-item account-social-profiles" href="{% url "social_profiles_settings" %}">
-            {% trans "Social Profiles" %}
-        </a>
-    </div>
-    <div class="panel-heading"><strong>{% trans "Settings" %}</strong></div>
-    <div class="list-group">
-        <a class="list-group-item account-settings" href="{% url "account_settings" %}">
-            {% trans "Account" %}
-        </a>
-        <a class="list-group-item account-voice" href="{% url "voice_settings" %}">
-            {% trans "Voice" %}
-        </a>
-        <a class="list-group-item account-password" href="{% url "account_password" %}">
-            {% trans "Change password" %}
-        </a>
-    </div>
-    <div class="panel-heading"><strong>{% trans "Payments" %}</strong></div>
-    <div class="list-group">
-        <a class="list-group-item pinax-stripe-subscriptions" href="{% url "pinax_stripe_subscription_list" %}">
-            {% trans "Subscriptions" %}
-        </a>
-        <a class="list-group-item pinax-stripe-payment-methods" href="{% url "pinax_stripe_payment_method_list" %}">
-            {% trans "Payment Methods" %}
-        </a>
-        <a class="list-group-item pinax-stripe-invoices" href="{% url "pinax_stripe_invoice_list" %}">
-            {% trans "Payment History" %}
-        </a>
-    </div>
+<div class="panel panel-group" id="settings-menu">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" data-parent="#settings-menu" href="#social-section">
+				<strong>{% trans "Social" %}</strong>
+			</a>
+		</div>
+		<div id="social-section" class="panel-collapse collapse">
+			<div class="list-group">
+				<a class="list-group-item account-posting-schedule" href="{% url "calendar_current_month" %}">
+					{% trans "Calendar" %}
+				</a>
+				<a class="list-group-item account-social-profiles" href="{% url "social_profiles_settings" %}">
+					{% trans "Social Profiles" %}
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" data-parent="#settings-menu" href="#settings-section">
+				<strong>{% trans "Settings" %}</strong>
+			</a>
+		</div>
+		<div id="settings-section" class="panel-collapse collapse">
+			<div class="list-group">
+				<a class="list-group-item account-settings" href="{% url "account_settings" %}">
+					{% trans "Account" %}
+				</a>
+				<a class="list-group-item account-voice" href="{% url "voice_settings" %}">
+					{% trans "Voice" %}
+				</a>
+				<a class="list-group-item account-password" href="{% url "account_password" %}">
+					{% trans "Change password" %}
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-parent="#settings-menu" href="http://support.gosimplyposted.com/">
+				<strong>{% trans "Support"%}</strong>
+			</a>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a data-toggle="collapse" data-parent="#settings-menu" href="#payments-section">
+				<strong>{% trans "Payments" %}</strong>
+			</a>
+		</div>
+		<div id="payments-section" class="panel-collapse collapse">
+			<div class="list-group">
+				<a class="list-group-item pinax-stripe-subscriptions" href="{% url "pinax_stripe_subscription_list" %}">
+					{% trans "Subscriptions" %}
+				</a>
+				<a class="list-group-item pinax-stripe-payment-methods" href="{% url "pinax_stripe_payment_method_list" %}">
+					{% trans "Payment Methods" %}
+				</a>
+				<a class="list-group-item pinax-stripe-invoices" href="{% url "pinax_stripe_invoice_list" %}">
+					{% trans "Payment History" %}
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
