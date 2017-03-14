@@ -13,8 +13,6 @@ urlpatterns = [
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
     url(r"^admin/", include(admin.site.urls)),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
-    url(r'^calendar/event/', include("simply_posted_calendar.urls")),
-    url(r'^calendar/', include('calendarium.urls')),
     url(r"^account/confirm_email/(?P<key>\w+)/$", simply_posted_accounts.views.ConfirmEmailView.as_view(), name="account_confirm_email"),
     url(r"^account/schedule/(?P<year>\d+)/(?P<month>\d+)/$", MonthView.as_view(template_name='account/schedule.html'), name="calendar_month"),
     url(r"^account/schedule/$", login_required(CalendariumRedirectView.as_view(), login_url='/account/login/'),name='calendar_current_month'),
@@ -22,7 +20,6 @@ urlpatterns = [
     url(r"^account/voice/$", simply_posted_accounts.views.VoiceView.as_view(), name="voice_settings"),
     url(r"^account/signup/$", simply_posted_accounts.views.SignupView.as_view(template_name="account/signup.html"), name="account_signup"),
     url(r"^account/login/$", simply_posted_accounts.views.LoginView.as_view(), name="account_signup"),
-	url(r"^setup/$", simply_posted_accounts.views.setup, name="account_setup"), 
     # Add content provider account : Added by vikrant
     url(r"^account/cplogin/$", simply_posted_accounts.views.ContentProviderLoginView.as_view(), name="cplogin"),
     url(r"^account/loadcsvfile/$", simply_posted_accounts.views.LoadCSVFileView.as_view(), name="loadcsvfile"),
@@ -34,6 +31,7 @@ urlpatterns = [
 
     url(r"^account/", include("account.urls")),
     url(r"^payments/", include("pinax.stripe.urls")),
+    url(r'^publications/', include("simply_posted_calendar.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
