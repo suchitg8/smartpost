@@ -4,15 +4,12 @@ window.jQuery = window.$ = require('jquery');
 const $ = window.$;
 
 require('bootstrap');
-<<<<<<< HEAD
+require('fullcalendar');
 require('./jquery-1.12.4');
 require('./jquery-ui.min');
 require('./jquery.steps');
 require('./jquery.validate.min');
 require('./source');
-=======
-require('fullcalendar');
->>>>>>> 4d59c9886edec9be62651346c98ca5bfa53c47a9
 
 $(() => {
   const popoverContent = event => {
