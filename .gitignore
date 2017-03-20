@@ -6,3 +6,4 @@ dev.db
 node_modules
 static/dist/*
 static/_build/*
+smartpost
