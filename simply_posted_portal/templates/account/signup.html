@@ -21,6 +21,8 @@
                 {{ form|bootstrap }}
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% else %}
+                    <h4> no redirect url configured </h4>
                 {% endif %}
                 <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
             </form>

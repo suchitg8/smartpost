@@ -7,13 +7,14 @@ from account.utils import default_redirect
 from account.conf import settings
 from account.models import EmailAddress
 from social_django.models import UserSocialAuth
-from simply_posted_accounts.models import ContentProvider , Post
+from simply_posted_accounts.models import ContentProvider , Post, category_choices, UserProfile
 from django.shortcuts import redirect
 import account.forms
 import account.views
 import simply_posted_accounts.forms
 import requests
 import time
+
 
 # Added by vikrant
 from django.views.generic import View
@@ -81,6 +82,14 @@ class SignupView(account.views.SignupView):
 
     form_class = simply_posted_accounts.forms.SignupForm
     identifier_field = "email"
+    redirect_field_value = 'setup'
+
+    # def get(self, *args, **kwargs):
+    #      if self.request.user.is_authenticated():
+    #         return redirect(default_redirect(self.request, settings.ACCOUNT_LOGIN_REDIRECT_URL))
+    #     if not self.is_open():
+    #         return self.closed()
+    #     return super(SignupView, self).get(*args, **kwargs)
 
     def after_signup(self, form):
         self.create_profile(form)
@@ -88,16 +97,16 @@ class SignupView(account.views.SignupView):
         super(SignupView, self).after_signup(form)
 
     def create_profile(self, form):
-        self.created_user.first_name = form.cleaned_data["first_name"]
-        self.created_user.last_name = form.cleaned_data["last_name"]
+        #self.created_user.first_name = form.cleaned_data["first_name"]
+        #self.created_user.last_name = form.cleaned_data["last_name"]
         self.created_user.save()
         profile = self.created_user.profile
-        profile.company = form.cleaned_data["company"]
+        #profile.company = form.cleaned_data["company"]
         profile.save()
 
     def set_timezone(self,form):
         fields = {}
-        fields["timezone"] = form.cleaned_data["timezone"]
+        #fields["timezone"] = form.cleaned_data["timezone"]
         if fields:
             account = self.created_user.account
             for k, v in fields.items():
@@ -500,3 +509,18 @@ def StripeDetailStore(request):
     # )
 
     return render(request,"stripeform.html", context)
+
+# User onbarding process after signup
+def OnboardingProcess(request):
+    data = {}
+    if request.method == 'POST':
+        user = request.user
+        profile = UserProfile.objects.get(user = user)
+        profile.company = request.POST.get('business-name')
+        
+
+    return render(request, 'account/setup.html', {
+        'data': data, 
+        'category_choices': category_choices, 
+        'category_half': len(category_choices) / 2
+        })

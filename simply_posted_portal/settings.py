@@ -10,14 +10,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'simply_posted_portal',
-        'USER': 'simplyposted',
-        'PASSWORD': os.environ.get("POSTGRESQL_PASSWORD"),
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
 
-ALLOWED_HOSTS = ['104.131.3.42']
+ALLOWED_HOSTS = ['104.131.3.42', 'localhost']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -206,6 +206,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 ACCOUNT_USE_AUTH_AUTHENTICATE = True
 ACCOUNT_USER_DISPLAY = lambda user: user.email
+ACCOUNT_SIGNUP_REDIRECT_URL = '/account/setup/'
 
 LOGIN_REDIRECT_URL = "social_profiles_settings"
 

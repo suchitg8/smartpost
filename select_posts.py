@@ -19,17 +19,20 @@ class ContentSelectionService:
       'Enterprise': 84
     }
 
-    plan = self.user.customer.subscription_set.all().first().plan
-    return plans[plan.stripe_id]
+    # plan = self.user.customer.subscription_set.all().first().plan
+    # return plans[plan.stripe_id]
+    return 12
 
   # B = Number of posts NOT from their website link. Result of Topical/Promotional Slider (a number determined in voice match input by customer)
   def number_of_posts_not_from_their_website(self):
+    return 2
     values = [None, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4]
     factor = values[int(self.profile.business_type)]
     return int(math.ceil(self.plan() * factor))
 
   # L = Result of General/Local slider
   def general_local_slider(self):
+    return 12
     values = list(range(6))
     selected_value = values[int(self.profile.market_type) - 1]
 
@@ -40,6 +43,7 @@ class ContentSelectionService:
 
   # C = Result of Playful/Corporate Slider
   def playful_percentage(self):
+    return 2
     values = [None, 0.9, 0.8, 0.6, 0.4, 0.2, 0.1]
     return values[int(self.profile.temp_type)]
 
@@ -52,6 +56,9 @@ class ContentSelectionService:
     categories_count = len(self.profile.selected_categories)
     total = self.number_of_total_posts()
 
+    categories_count = 1
+    total=1
+
     res = [total / categories_count for i in range(categories_count)]
     if total % categories_count != 0:
       for i in range(total % categories_count):
@@ -60,6 +67,7 @@ class ContentSelectionService:
     return res
 
   def select_posts(self):
+    return []
     posts = []
 
     for index, item in enumerate(self.posts_per_category()):

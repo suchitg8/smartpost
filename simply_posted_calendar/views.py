@@ -10,8 +10,10 @@ from simply_posted_accounts.models import Post, RejectedPost
 from publishing import PublishingService
 from select_posts import ContentSelectionService
 
+import urllib2
+
 def get_all(request):
-    publications = to_dict(Publication.objects.filter(user=request.user))
+    publications = to_dict(request, Publication.objects.filter(user=request.user))
     return JsonResponse(publications, safe=False)
 
 def approve(request, pk):
@@ -49,13 +51,28 @@ def get_new(request):
     publications = ContentSelectionService(request.user).make_publications()
     return JsonResponse(to_dict(publications), safe=False)
 
-def to_dict(publications):
+def to_dict(request, publications):
     result = []
     for publication in publications:
         color = '#449d44' if publication.approved else '#c9302c' if publication.approved == False else '#337ab7'
         title = publication.post.corporate_title if publication.corporate_title else publication.post.playful_title
 
-        publication_data = {'title': title, 'content': publication.post.blog_link, 'start': publication.publication_date.isoformat(), 'id': publication.id, 'color': color, 'reject_count': publication.reject_count, 'approved': publication.approved}
+        # content = urllib2.urlopen(publication.post.blog_link).read()
+        content = publication.post.blog_link
+        image_link = publication.post.image_link
+
+        publication_data = {
+            'title': title, 
+            'content': content, 
+            'image': image_link, 
+            'fb_groups': request.user.social_auth.get(provider="facebook").extra_data['groups'], 
+            'fb_pages': request.user.social_auth.get(provider="facebook").extra_data['pages'], 
+            'start': publication.publication_date.isoformat(), 
+            'id': publication.id, 
+            'color': color, 
+            'reject_count': publication.reject_count, 
+            'approved': publication.approved
+        }
         result.append(publication_data)
 
     return result

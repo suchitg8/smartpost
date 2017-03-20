@@ -91,7 +91,6 @@ gulp.task('watch', function watch() {
 });
 
 gulp.task('build', gulp.series([
-  'xo',
   'build:clean',
   gulp.parallel([
     'build:styles',

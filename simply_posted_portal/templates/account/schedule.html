@@ -19,6 +19,35 @@
     <div class="clearfix" style="margin-bottom:20px;"><button class="btn btn-primary pull-right js-get-posts">Get New Posts</button></div>
     <div id="calendar"></div>
 
+    <div id="publish-portal" class="modal in fade" role="dialog" tabindex="-1" aria-labelledby="publish-portal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title">
+              <br/>
+              <h2> POST </h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+            </div>
+          </div>
+          <div class="modal-body">
+            <h3 class="title"> </h3>
+            <p class="content "> </p>
+          </div>
+          <div id="user_social_info">
+          </div>
+          <div class="clearfix"> </div>
+          <div class="fotter modal-footer">
+            <button type='button' class='btn btn-danger pull-right btn-sm col-sm-2 js-reject-content'>
+              Reject
+            </button>
+            <button type='button' class='btn btn-primary pull-right btn-sm col-sm-2 js-approve-content'>
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="support-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">

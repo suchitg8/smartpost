@@ -1,0 +1,217 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block body_base %}
+
+<!--	<div id="sp-header">
+		<label> Simply <b> Posted </b> </label>
+		<div class="user">
+			<h2> John Doe </h2>
+			<h4> johndoe@gmail.com </h4>
+		</div>
+	</div> -->
+	{{ data }}
+	<form id="form-id" method="POST">
+	{% csrf_token %}
+	<div id="wizard">
+		<h1></h1>
+		<div class="first-step"> 
+			<h2 class="text-center heading color-main"> Welcome to Simply Posted! Let's get started. </h2>
+			<h3 class="text-center heading color-sub"> First authorize your social media accounts: </h3>
+			<div class="text-center col-md-12">
+				<div class="col-md-4"> <button class="color-twitter fa fa-twitter">  
+					<span> Add a <b>Twitter</b> account </span> </button> 
+				</div>
+				<div class="col-md-4"> <button class="color-linkedin fa fa-linkedin">  
+					<span> Add a <b>LinkedIn</b> account </span> </button> 
+				</div>
+				<div class="col-md-4"> <button class="color-pinterest fa fa-pinterest">  
+					<span> Add a <b>Pinterest</b> account </span> </button> 
+				</div>
+				<div class="col-md-4"> <button class="color-facebook fa fa-facebook">  
+					<span> Add a <b>Facebook</b> account </span> </button> 
+				</div>
+				<div class="col-md-4"> <button class="color-google fa fa-google">  
+					<span> Add a <b>Google+</b> account </span> </button> 
+				</div>
+				<div class="col-md-4"> <button class="color-instagram fa fa-instagram">  
+					<span> Add a <b>Instagram</b> account </span> </button> 
+				</div>
+			</div>
+			<p class="text-center footing color-sub"> Need another type of account? Click here. </p>
+		</div>
+		
+		<h1></h1>
+		<div class="second-step"> 
+			<h2 class="text-center footing color-main"> Now, set your Voice Settings. </h2>
+			<h3 class="text-center heading color-sub"> Tell us more, so we can curate great content for you. </h3>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<label class="color-main" for="business-name"> Business Name </label>
+					<input type="text" class="form-control" name="business-name" id="business-name" placeholder="Your Business Name" required minlength="3" />
+				</div>
+				<p class="col-md-7 description"> Let us know how our Content Writers should refer to your business. </p>
+			</div>
+			<hr/>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<label class="color-main" for="website-url"> Website Url </label>
+					<input type="url" class="form-control" name="website-url" id="website-url" placeholder="http://" required />
+				</div>
+				<p class="col-md-7 description"> Our content engine will pull information from your site, and direct followers back to it. </p>
+			</div>
+			<hr/>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<label class="color-main" for="geography"> Geography </label>
+					<input type="text" class="form-control" name="geography" id="geography" placeholder="Your City, Neighbourhood" required />
+				</div>
+				<p class="col-md-7 description"> What area(s) do you serve? Your geography is important so Our Content Engine can curate local content for you. </p>
+			</div>
+		</div>
+		
+		<h1></h1>
+		<div class="third-step">
+			<h2 class="text-center footing color-main"> Now, set your Voice Settings. </h2>
+			<h3 class="text-center heading color-sub"> Tell us more, so we can curate great content for you. </h3>
+			<hr/>
+			<label class="color-main"> What tone do you like for your posts? </label>
+			<div class="clearfix">
+				<div class="form-group col-md-6">
+					<label for="tone-topical" > Topical </label>
+					<input type="range" name="tone-topical" class="form-control" id="tone-topical" />
+					<div class="slider"> <div id="tone-topical-wrap"> </div> </div>
+					<label > Promotional </label>
+				</div>
+				<p class="col-md-6 description"> Topical: Industry related content. Promotional Links to your website. </p>
+			</div>
+			<div class="clearfix">
+				<div class="form-group col-md-6">
+					<label for="tone-playful" > Playful </label>
+					<input type="range" name="tone-playful" class="form-control" id="tone-playful" />
+					<div class="slider"> <div id="tone-playful-wrap"> </div> </div>
+					<label > Corporate </label>
+				</div>
+				<p class="col-md-6 description"> Is your tone more casual or serious? </p>
+			</div>
+			<div class="clearfix">
+				<div class="form-group col-md-6">
+					<label for="tone-general" > General </label>
+					<input type="range" name="tone-general" class="form-control" id="tone-general" />
+					<div class="slider"> <div id="tone-general-wrap"> </div> </div>
+					<label > Local </label>
+				</div>
+				<p class="col-md-6 description"> Do you prefer content that is suited for a general audience, or your local community? </p>
+			</div>
+		</div>
+		
+		<h1></h1>
+		<div class="fourth-step">
+			<h2 class="text-center footing color-main"> Now, set your Voice Settings. </h2>
+			<h3 class="text-center heading color-sub"> Tell us more, so we can curate great content for you. </h3>
+			<hr/>
+			<label class="color-main"> Real Estate categories. </label>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<div class="col-md-5 button-group">
+					{% for key, category in category_choices %}
+						<label> <input type="checkbox" name="category[{{key}}]" /> {{category}} </label>
+						{% if category_half == forloop.counter %}
+							</div>
+							<div class="col-md-7 button-group">
+						{% endif %}
+					{% endfor %}
+					</div>
+				</div>
+				<p class="col-md-7 description" >
+					Please tell us which categories apply for your social media content. Feel free to select more than one.
+				</p>
+			</div>
+			<hr/>
+		</div>
+		
+		<h1></h1>
+		<div class="fifth-step">
+			<h2 class="text-center footing color-main"> Now, set your Voice Settings. </h2>
+			<h3 class="text-center heading color-sub"> Tell us more, so we can curate great content for you. </h3>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<label class="color-main" for="other-blogs-news"> Other Blogs and News </label>
+					<input type="url" class="form-control" name="other-blogs-news" id="other-blogs-news" placeholder="Enter website here." required />
+				</div>
+				<p class="col-md-7 description"> Do you have any other blogs or websites your share from? </p>
+			</div>
+			<hr/>
+			<div class="clearfix">
+				<div class="form-group col-md-5">
+					<label class="color-main" for="additional-information"> Additional Information </label>
+					<textarea type="text" class="form-control" name="additional-information" id="additional-information" placeholder="Enter Additional Information here." rows="5"></textarea>
+				</div>
+				<p class="col-md-7 description"> Anything else you think we should know? Provide any additional information here. </p>
+			</div>
+		</div>
+		
+		<h1></h1>
+		<div class="sixth-step">
+			<h2 class="text-center footing color-main"> Choose a Plan. </h2>
+			<h3 class="text-center heading color-sub"> Select subscription to complete your account. </h3>
+			<input type="hidden" name="plan-type" id="plan-type" />
+			<div class="col-md-4">
+				<div class="plan-box">
+					<h2 class="text-center color-main"> Basic </h2>
+					<label class="text-center color-sub"> <b> $99 </b>/month for 1 user </label>
+					<hr/>
+					<div class="tag"> Free 7day trial </div>
+					<p> Automated Content </p>
+					<p> 2 Posts a week </p>
+					<p> Unlimited Social Networks </p>
+					<p> Dashboard access </p>
+					<p> Industry Relevant Content </p>
+					<p> Voice Match content <br/> (&links to your website) </p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="plan-box">
+					<h2 class="text-center color-main"> Entry </h2>
+					<label class="text-center color-sub"> <b> $39 </b>/month for 1 user </label>
+					<hr/>
+					<div class="tag"> Free 7day trial </div>
+					<p> Automated Content </p>
+					<p> 2 Posts a week </p>
+					<p> Unlimited Social Networks </p>
+					<p> Dashboard access </p>
+					<p> Industry Relevant Content </p>
+					<p> Voice Match content <br/> (&links to your website) </p>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="plan-box">
+					<h2 class="text-center color-main"> Pro </h2>
+					<label class="text-center color-sub"> <b> $149 </b>/month for 3 users </label>
+					<hr/>
+					<div class="tag"> Free 7day trial </div>
+					<p> Automated Content </p>
+					<p> 2 Posts a week </p>
+					<p> Unlimited Social Networks </p>
+					<p> Dashboard access </p>
+					<p> Industry Relevant Content </p>
+					<p> Voice Match content <br/> (&links to your website) </p>
+				</div>
+			</div>
+		</div>
+		
+		<h1></h1>
+		<div class="seventh-step">
+			<h2 class="text-center footing color-main"> Take 20% off your payment. </h2>
+			<h3 class="text-center heading color-sub"> Refer us to 5 friends and save. </h3>
+		</div>
+	</div>
+	</form>
+	
+<!--<script language="javascript" src="/site_media/static/js/setup/jquery-1.12.4.js"></script>
+	<script language="javascript" src="/site_media/static/js/setup/jquery-ui.min.js"> </script>
+	<script language="javascript" src="/site_media/static/js/setup/jquery.steps.js"> </script>
+	<script language="javascript" src="/site_media/static/js/setup/jquery.validate.min.js"> </script> -->
+
+{% endblock %}

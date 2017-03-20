@@ -38,9 +38,8 @@ class SignupForm(account.forms.SignupForm):
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         del self.fields["username"]
-        field_order = ["company", "first_name", "last_name", "email",
-                       "password", "password_confirm", "timezone",
-                       "code"]
+        field_order = ["email", "password", "password_confirm"]
+        #"company", "first_name", "last_name", "timezone", "code"
         if not OrderedDict or hasattr(self.fields, "keyOrder"):
             self.fields.keyOrder = field_order
         else:
